@@ -1,5 +1,6 @@
 r"Miłosz Jura, version 1.0"
 import sys
+from curses import wrapper
 import os
 import re
 from pathlib import Path
@@ -19,7 +20,8 @@ class Colors:
         UNDERLINE = '\033[4m'
         ENDC = '\033[0m'
 
-if __name__ == "__main__":
+def start_app(stdscr):
+    stdscr.clear()
     help_text = """PyMDc, simple tool to display MD files.
     pymdc.py {FILE} {ARGUMENTS}
     --help         - you know 8)
@@ -103,4 +105,8 @@ if __name__ == "__main__":
         print(file)
     else:
         input(file)
+    stdscr.refresh()
+    srdscr.getkey()
 
+if __name__ == "__main__":
+    wrapper(start_app)
