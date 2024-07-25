@@ -17,6 +17,7 @@ If you don't like it, you may use ``--casual-print`` option
 For more info use ``pymdc.py --help``
 
 # Roadmap
+- [ ] Open as ``app``, e.g. like vi or nano
 - [ ] Set better colors for heading
 - [ ] Handle tables
 - [ ] Add more file metadata
