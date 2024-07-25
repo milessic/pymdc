@@ -1,5 +1,4 @@
 r"Miłosz Jura, version 1.0"
-# TODO add new repo and set it up
 import sys
 import os
 import re
