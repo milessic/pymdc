@@ -56,7 +56,6 @@ if __name__ == "__main__":
     
     # clear empty lines from file end
     while repr(file_lines[-1]) == "'\\n'":
-        print("pop")
         file_lines.pop()
     file = ""
     
