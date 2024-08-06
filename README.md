@@ -23,3 +23,8 @@ For more info use ``pymdc.py --help``
 - [ ] Add more file metadata
 - [ ] release to PyPi
 - [ ] Add disclaimer handling
+
+# Issues
+- [ ] Italic and Bold that start of end line don't work
+- [ ] Full-line comments leave empty line
+- [ ] Multiline comments not supported yet

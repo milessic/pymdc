@@ -8,14 +8,20 @@ class Colors:
         VIOLET = '\033[95m'
         DIMMED= '\033[90m'
         BLUE = '\033[94m'
+        BLUE_LIGHT = '\033[96m'
+        BLUE_LIGHTER = '\033[96m'
         CYAN = '\033[96m'
         GREEN = '\033[92m'
+        GREEN_LIGHT = '\033[93m'
+        GREEN_LIGHTER = '\033[93m'
         YELLOW = '\033[93m'
+        RED = '\033[91m'
     # Classes
         FAIL = '\033[91m'
         WARNING = '\033[93m'
     # Other formatting
         BOLD = '\033[1m'
+        ITALIC = '\033[3m'
         UNDERLINE = '\033[4m'
         ENDC = '\033[0m'
 
@@ -60,8 +66,13 @@ if __name__ == "__main__":
     
     # code_started will be used to the text formatted using ```
     code_started = False
+    alert_started = False
+    comment_started = False
+    index = -1
     # iterate through read file
     for l in file_lines:
+        index += 1
+
         # handle ``` code blocks
         if not code_started and l.startswith("```"):
             line = Colors.YELLOW+ l
@@ -75,6 +86,29 @@ if __name__ == "__main__":
                 line = l + Colors.ENDC
                 code_started = False
 
+        if not alert_started and l.startswith("> ["):
+            if "[!WARNING]" in l:
+                line =  Colors.WARNING + l
+            elif "[!NOTE]" in l:
+                line = Colors.BLUE_LIGHT + l
+            elif "[!TIP]" in l:
+                line = Colors.GREEN_LIGHT + l
+            elif "[!IMPORTANT]" in l:
+                line = Colors.VIOLET + l
+            elif "[!CAUTION]" in l:
+                line = Colors.RED + l
+            else:
+                line = l
+            alert_started = True
+            file += line
+            continue
+        if alert_started:
+            # check if next line is alert as well
+            if not file_lines[index+1].startswith("> "):
+                line = l + Colors.ENDC
+                alert_started = False
+                file += line
+                continue
         # handle other text 
         else:
             l = re.sub(r"\s((?<!`)``(?!`))", Colors.DIMMED + " ``", l) 
@@ -87,8 +121,42 @@ if __name__ == "__main__":
                 line = Colors.BLUE + l + Colors.ENDC
             elif l.startswith("- ["):
                 line = l.replace("[ ]", Colors.BLUE+ "[ ]" + Colors.ENDC).replace("[x]", Colors.GREEN+ "[x]" + Colors.ENDC)
+            elif l.startswith("  - ["):
+                line = l.replace("[ ]", Colors.BLUE_LIGHT+ "[ ]" + Colors.ENDC).replace("[x]", Colors.GREEN_LIGHT+ "[x]" + Colors.ENDC)
+            elif "    - [" in l: # TODO do it better, "    - [" doesnt work for some reason
+                line = l.replace("[ ]", Colors.BLUE_LIGHT+ "[ ]" + Colors.ENDC).replace("[x]", Colors.GREEN_LIGHT+ "[x]" + Colors.ENDC)
             else:
                 line = l
+            # comment
+            line = re.sub(r"<!--[\s\S]*?-->", "", line)
+            # bold
+            """
+            # FIXME start add regex 
+            if line.startswith("__") or line.startswith("**"):
+                line = line.replace("**", " " + Colors.BOLD)
+                line = line.replace("__", Colors.ENDC + " ")
+            if line.endswith("__") or line.endswith("**"):
+                line = line.replace("__", Colors.ENDC + " ")
+                line = line.replace("**", Colors.ENDC + " ")
+            if line.startswith("_ _") or line.startswith("* *"):
+                line = line.replace("* *", " " + Colors.ITALIC)
+                line = line.replace("_ _", " " + Colors.ITALIC)
+            if line.endswith("_ _") or line.endswith("* *"):
+                line = line.replace("_ _", Colors.ENDC + " ")
+                line = line.replace("* *", Colors.ENDC + " ")
+            # FIXME end
+            """
+
+
+            line = line.replace(" __", " " + Colors.BOLD)
+            line = line.replace("__ ", Colors.ENDC + " ")
+            line = line.replace(" **", " " + Colors.BOLD)
+            line = line.replace("** ", Colors.ENDC + " ")
+
+            line = line.replace(" _ _", " " + Colors.ITALIC)
+            line = line.replace("_ _ ", Colors.ENDC + " ")
+            line = line.replace(" * *", " " + Colors.ITALIC)
+            line = line.replace("* * ", Colors.ENDC + " ")
         file += line
 
         # print raw line if needed
@@ -104,3 +172,4 @@ if __name__ == "__main__":
     else:
         input(file)
 
+"""
