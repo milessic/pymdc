@@ -23,6 +23,7 @@ For more info use ``pymdc.py --help``
 - [ ] Add more file metadata
 - [ ] release to PyPi
 - [ ] Add disclaimer handling
+- [ ] Add Search
 
 # Issues
 - [ ] Italic and Bold that start of end line don't work
